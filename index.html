@@ -378,7 +378,7 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ userId: userId, containerId: containerId })
         }).then(() => {
-          // 🎉 成功！切换界面显示动画
+          // 切换界面显示动画
           showSuccessAnimation();
         }).catch(err => {
           alert("通信エラー: " + err);
