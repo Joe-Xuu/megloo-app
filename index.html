@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Megloo 借出确认</title>
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <style>
+      body { font-family: -apple-system, sans-serif; padding: 20px; text-align: center; background-color: #f5f5f5; }
+      .card { background: white; padding: 30px 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 20px; }
+      .container-id { font-size: 36px; font-weight: 800; color: #06C755; margin: 20px 0; display: block; }
+      button { background-color: #06C755; color: white; border: none; padding: 15px 30px; font-size: 18px; border-radius: 50px; width: 100%; font-weight: bold; cursor: pointer; transition: opacity 0.3s; }
+      button:disabled { background-color: #ccc; cursor: not-allowed; opacity: 0.6; }
+      #status { margin-top: 15px; font-size: 13px; color: #888; }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h3>Megloo 容器借出</h3>
+      <p>以下の容器を借りますか？</p>
+      
+      <span id="cid-display" class="container-id">Loading...</span>
+      
+      <button id="btn-borrow" onclick="handleBorrow()" disabled>初期化中...</button>
+      <div id="status">システム接続中...</div>
+    </div>
+
+    <script>
+      // GAS 部署生成的 URL
+      const GAS_API_URL = "https://script.google.com/macros/s/AKfycbxeicIpm-iDir_5LK2TKvp5Q5ERUJgQhF4pzEXPYIILVnXsGRHGJ5aaPtfU0f6vz4vP/exec";
+      const MY_LIFF_ID = "2008626930-AddPwDy7"; 
+
+      let containerId = "";
+
+      // 1. 页面启动：从 URL 获取 ID (GitHub Pages 没有重定向，可以直接读！)
+      window.onload = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        containerId = urlParams.get('id');
+
+        if (!containerId) {
+          // 容错：有时候参数会跑进 liff.state 里
+          const liffState = urlParams.get('liff.state');
+          if (liffState && liffState.includes('id=')) {
+             containerId = liffState.split('id=')[1];
+          }
+        }
+
+        if (containerId) {
+          document.getElementById('cid-display').innerText = containerId;
+          initializeLiff();
+        } else {
+          document.getElementById('cid-display').innerText = "ERROR";
+          document.getElementById('status').innerText = "QRコードの読み取りに失敗しました";
+        }
+      };
+
+      // 2. 初始化 LIFF
+      function initializeLiff() {
+        liff.init({ liffId: MY_LIFF_ID })
+          .then(() => {
+            // ✅ GitHub Pages 环境极度稳定，这里几乎秒开
+            if (liff.isLoggedIn()) {
+               readyToGo();
+            } else {
+               // 没登录就去登录 (GitHub Pages 不会丢失参数，可以直接 login)
+               liff.login(); 
+            }
+          })
+          .catch((err) => {
+            document.getElementById('status').innerText = "Init Error: " + err;
+          });
+      }
+
+      function readyToGo() {
+        document.getElementById('status').innerText = "準備完了";
+        const btn = document.getElementById('btn-borrow');
+        btn.disabled = false;
+        btn.innerText = "はい (確認)";
+      }
+
+      // 3. 点击借出：发送 API 请求
+      function handleBorrow() {
+        const btn = document.getElementById('btn-borrow');
+        btn.disabled = true;
+        btn.innerText = "送信中...";
+
+        // 获取 User ID
+        const idToken = liff.getDecodedIDToken();
+        if (!idToken || !idToken.sub) {
+           alert("UserID取得失敗。再ログインしてください。");
+           liff.login();
+           return;
+        }
+        const userId = idToken.sub;
+
+        // 🚀 使用 fetch 发送数据给 GAS 后端
+        // mode: 'no-cors' 是关键！因为 GAS 不支持标准的 CORS 响应
+        fetch(GAS_API_URL, {
+          method: 'POST',
+          mode: 'no-cors', 
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            userId: userId,
+            containerId: containerId
+          })
+        }).then(() => {
+          // 因为 no-cors 模式下我们看不到返回值，只要不报错就算成功
+          alert("貸出完了！🍱");
+          liff.closeWindow();
+        }).catch(err => {
+          alert("通信エラー: " + err);
+          btn.disabled = false;
+          btn.innerText = "再試行";
+        });
+      }
+    </script>
+  </body>
+</html>
