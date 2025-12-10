@@ -106,34 +106,58 @@
       button:active { transform: scale(0.96); }
       button:disabled { background-color: #E0E0E0; color: #999; box-shadow: none; }
 
-      /* --- 3. CO2 炫酷特效样式 --- */
+/* --- 3. 环保影响力列表样式 (Eco Impact) --- */
       .success-view { display: none; }
       
-      .co2-badge {
-        background: linear-gradient(135deg, #e0f7fa 0%, #e8f5e9 100%);
+      .impact-box {
+        background: #f0fdf4; /* 浅绿色背景 */
         border: 1px solid #b9f6ca;
-        padding: 15px;
         border-radius: 12px;
-        margin-top: 20px;
+        padding: 15px;
+        margin-top: 15px;
+        text-align: left; /* 列表改为左对齐 */
         animation: slideUp 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       }
-      
-      .co2-text {
-        font-size: 12px; color: #555; display: block; margin-bottom: 4px;
-      }
-      
-      /* 炫酷的渐变大字 */
-      .co2-number {
-        font-family: 'Montserrat', sans-serif;
-        font-size: 32px;
-        font-weight: 900;
-        background: linear-gradient(45deg, #00C853, #009688);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        display: inline-block;
+
+      .impact-section-title {
+        font-size: 11px;
+        font-weight: 700;
+        color: #05a045;
+        margin-bottom: 5px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
       }
 
-      .leaf-icon { font-size: 24px; vertical-align: middle; margin-left: 5px;}
+      .impact-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 13px;
+        color: #555;
+        margin-bottom: 4px;
+        padding-left: 16px; /* 缩进一点 */
+      }
+
+      .impact-val {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 700;
+        color: #06C755;
+      }
+
+      .impact-divider {
+        border-top: 1px dashed #b9f6ca;
+        margin: 8px 0 10px 0;
+      }
+
+      .source-note {
+        font-size: 9px;
+        color: #999;
+        text-align: right;
+        margin-top: 8px;
+        font-style: italic;
+        font-family: 'Montserrat', sans-serif;
+      }
 
       /* --- 动画 Keyframes --- */
       @keyframes scalePulse {
@@ -176,23 +200,46 @@
         </button>
       </div>
 
-      <div id="success-view" class="success-view">
+<div id="success-view" class="success-view">
         <div style="font-size: 60px; color: #06C755; animation: popIn 0.5s;">✓</div>
         <h2 style="margin: 10px 0;">貸出完了</h2>
         
-        <div class="co2-badge">
-          <span class="co2-text">CO2削減貢献量</span>
-          <div>
-            <span class="co2-number">-12g</span>
-            <span class="leaf-icon">🍃</span>
+        <div class="impact-box">
+          
+          <div class="impact-section-title">
+            <span>🍃</span> CO2削減貢献
           </div>
+          <div class="impact-row">
+            <span>対紙容器</span>
+            <span class="impact-val">-7.2g<span style="font-size:10px">*</span></span>
+          </div>
+          <div class="impact-row">
+            <span>対プラ容器</span>
+            <span class="impact-val">-13.9g<span style="font-size:10px">*</span></span>
+          </div>
+
+          <div class="impact-divider"></div>
+
+          <div class="impact-section-title">
+            <span>🗑️</span> ゴミ削減量
+          </div>
+          <div class="impact-row">
+            <span>紙ゴミ</span>
+            <span class="impact-val">-3.6g<span style="font-size:10px">*</span></span>
+          </div>
+          <div class="impact-row">
+            <span>プラゴミ</span>
+            <span class="impact-val">-2.1g<span style="font-size:10px">*</span></span>
+          </div>
+
+          <div class="source-note">source: megloo Inc.</div>
         </div>
         
-        <p style="color:#999; font-size:12px; margin-top:15px;">
-          ご利用ありがとうございます！
+        <p style="color:#999; font-size:12px; margin-top:20px;">
+          ご利用ありがとうございます！<br>
+          美味しく召し上がれ🍱
         </p>
       </div>
-    </div>
 
     <div class="bottom-logos">
       <img src="lab_logo.png" class="small-logo" alt="Lab Logo">
