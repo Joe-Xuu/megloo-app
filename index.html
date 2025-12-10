@@ -8,25 +8,101 @@
     <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
     
     <style>
-      /* --- 1. 开屏动画样式 (Splash Screen) --- */
+/* --- 1. 开屏动画样式 (Splash Screen) --- */
       #splash-screen {
         position: fixed;
         top: 0; left: 0; width: 100%; height: 100%;
-        background-color: #06C755; /* LINE Green */
+        background: linear-gradient(135deg, #06C755 0%, #04a847 100%); /* 稍微加点渐变更有质感 */
         z-index: 9999;
         display: flex;
         justify-content: center;
         align-items: center;
+        flex-direction: column; /* 改为纵向排列 */
         transition: opacity 0.8s ease-out, visibility 0.8s;
+        padding: 20px;
+        box-sizing: border-box;
       }
-      .splash-text {
+
+      /* 主标题容器 */
+      .splash-content {
+        text-align: center;
         color: white;
+      }
+
+      /* 主标题 (Re:Turn) */
+      .splash-title {
         font-family: 'Montserrat', sans-serif;
-        font-size: 48px;
-        font-weight: 800;
-        letter-spacing: 2px;
+        font-size: 56px; /* 稍微加大一点 */
+        font-weight: 900;
+        letter-spacing: 3px;
+        margin-bottom: 20px;
+        text-shadow: 0 4px 10px rgba(0,0,0,0.1);
         animation: scalePulse 2s infinite;
       }
+
+      /* 副标题区域 */
+      .splash-sub {
+        font-family: 'Montserrat', sans-serif;
+        opacity: 0; /* 初始隐藏，靠动画显示 */
+        transform: translateY(20px);
+        animation: fadeInUp 0.6s ease-out forwards;
+      }
+
+      /* 第一组：Credit */
+      .sub-credit-group {
+        margin-bottom: 15px;
+      }
+      .sub-org {
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        margin-bottom: 4px;
+      }
+      .sub-author {
+        font-size: 11px;
+        font-weight: 500;
+        opacity: 0.9;
+      }
+
+      /* 分隔线 */
+      .sub-divider {
+        width: 40px;
+        height: 2px;
+        background: rgba(255,255,255,0.6);
+        margin: 0 auto 15px auto;
+        border-radius: 2px;
+      }
+
+      /* 第二组：Slogan */
+      .sub-slogan-group {
+        text-transform: uppercase;
+      }
+      .sub-3r {
+        font-size: 16px;
+        font-weight: 800;
+        letter-spacing: 2px;
+        margin-bottom: 4px;
+      }
+      .sub-action {
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 1px;
+        opacity: 0.8;
+        font-style: italic;
+      }
+
+      /* 动画延迟设置 (让文字一行行出来) */
+      .delay-1 { animation-delay: 0.2s; }
+      .delay-2 { animation-delay: 0.3s; }
+      .delay-3 { animation-delay: 0.4s; }
+      .delay-4 { animation-delay: 0.5s; }
+      .delay-5 { animation-delay: 0.6s; }
+
+      /* 新增：上浮渐现动画 */
+      @keyframes fadeInUp {
+        to { opacity: 1; transform: translateY(0); }
+      }
+
       /* 开屏消失的类 */
       .fade-out {
         opacity: 0;
@@ -177,10 +253,24 @@
       .credit { margin-top: 40px; font-size: 10px; color: #B0B0B0; font-family: sans-serif;}
     </style>
   </head>
-  <body>
+<body>
 
     <div id="splash-screen">
-      <div class="splash-text">Re:Turn</div>
+      <div class="splash-content">
+        <div class="splash-title">Re:Turn</div>
+        
+        <div class="splash-sub sub-credit-group delay-1">
+          <div class="sub-org">SFC Wada Lab & Megloo</div>
+          <div class="sub-author">Presented by Kouzen Jo</div>
+        </div>
+        
+        <div class="splash-sub sub-divider delay-2"></div>
+        
+        <div class="splash-sub sub-slogan-group">
+          <div class="sub-3r delay-3">Reduce & Reuse & Recycle</div>
+          <div class="sub-action delay-4">Think big, start small.</div>
+        </div>
+      </div>
     </div>
 
     <img src="sfc_logo.png" class="top-logo" alt="Keio SFC">
@@ -261,7 +351,7 @@
         // 页面加载 1.5秒 后，让绿色屏幕消失
         setTimeout(() => {
           document.getElementById('splash-screen').classList.add('fade-out');
-        }, 1500);
+        }, 2200);
 
         // --- 原有逻辑 ---
         const urlParams = new URLSearchParams(window.location.search);
