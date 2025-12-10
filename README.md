@@ -88,13 +88,9 @@ const MY_LIFF_ID = "YOUR_LIFF_ID";
     Ensure Scopes include openid and profile.
 
 ## License and Credits
-System Designed & Developed by Kouzen Jo 
-
-Affiliation: Wada Lab, Keio Univ. SFC
-
-PM: Megloo Inc.
-
+System Designed & Developed by Kouzen Jo  
+Affiliation: Wada Lab, Keio Univ. SFC  
+PM: Megloo Inc.  
 Collaborating Org: Kobayashi Create Inc.
-
 
 Copyright (c) 2025. Kouzen Jo. All rights reserved.
