@@ -1,4 +1,4 @@
-# Megloo Re:Turn System (Lending Client)
+# Re:Turn System (Lending Client)
 ## Overview
 
 This repository contains the client-side implementation for the Megloo Re:Turn System, a reusable food container lending platform deployed at Keio University SFC (Wada Lab).
@@ -89,8 +89,11 @@ const MY_LIFF_ID = "YOUR_LIFF_ID";
 
 ## License and Credits
 System Designed & Developed by Kouzen Jo 
+
 Affiliation: Wada Lab, Keio Univ. SFC
+
 PM: Megloo Inc.
+
 Collaborating Org: Kobayashi Create Inc.
 
 Copyright (c) 2025. Kouzen Jo. All rights reserved.
