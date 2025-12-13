@@ -440,8 +440,8 @@
             alert("⚠️ 貸出不可:\n\nこの容器は既に貸出中です。\n先に返却してください。\n(This container is not returned yet)");
             
             // 重置按钮状态，让用户可以重新扫其他的
-            btn.disabled = false;
-            btn.innerText = "Scan Another"; 
+            btn.disabled = true;
+            btn.innerText = "他のコードをスキャンしてください"; 
         } else {
             // 其他错误
             alert("System Error: " + data.message);
