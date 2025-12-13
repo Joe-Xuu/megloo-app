@@ -395,20 +395,68 @@
         if (!idToken) { location.reload(); return; }
         const userId = idToken.sub;
 
-        fetch(GAS_API_URL, {
-          method: 'POST',
-          mode: 'no-cors', 
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ userId: userId, containerId: containerId })
-        }).then(() => {
-          showSuccessAnimation();
-        }).catch(err => {
-          alert("Error: " + err);
-          btn.disabled = false;
-          btn.innerText = "Retry";
-        });
-      }
+    //     fetch(GAS_API_URL, {
+    //       method: 'POST',
+    //       mode: 'no-cors', 
+    //       headers: { 'Content-Type': 'application/json' },
+    //       body: JSON.stringify({ userId: userId, containerId: containerId })
+    //     }).then(() => {
+    //       showSuccessAnimation();
+    //     }).catch(err => {
+    //       alert("Error: " + err);
+    //       btn.disabled = false;
+    //       btn.innerText = "Retry";
+    //     });
+    //   }
 
+    //   function showSuccessAnimation() {
+    //     // 隐藏借出界面，显示成功界面
+    //     document.getElementById('borrow-view').style.display = 'none';
+    //     document.getElementById('success-view').style.display = 'block';
+        
+    //     // 3秒后自动关闭
+    //     setTimeout(() => {
+    //       liff.closeWindow();
+    //     }, 3000);
+    //   }
+
+    fetch(GAS_API_URL, {
+        method: 'POST',
+        //不要加 mode: 'no-cors'，否则读不到返回值
+        // Content-Type text/plain，
+        // 虽然我们发的是 JSON 字符串，但在 GAS 中这样写能避免跨域(CORS)预检报错
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        
+        body: JSON.stringify({ userId: userId, containerId: containerId })
+        })
+        .then(response => response.json()) // 解析后端返回的 JSON
+        .then(data => {
+        // 🟢 关键点3：根据后端返回的状态来决定显示什么
+        if (data.status === 'SUCCESS') {
+            // 成功：显示动画
+            showSuccessAnimation();
+        } else if (data.code === 'ALREADY_BORROWED') {
+            // 失败：重复借出
+            alert("⚠️ 貸出不可:\n\nこの容器は既に貸出中です。\n先に返却してください。\n(This container is not returned yet)");
+            
+            // 重置按钮状态，让用户可以重新扫其他的
+            btn.disabled = false;
+            btn.innerText = "Scan Another"; 
+        } else {
+            // 其他错误
+            alert("System Error: " + data.message);
+            btn.disabled = false;
+            btn.innerText = "Retry";
+        }
+        })
+        .catch(err => {
+        // 网络通讯层面的错误
+        console.error(err);
+        alert("Network Error: " + err);
+        btn.disabled = false;
+        btn.innerText = "Retry";
+        });
+    }
       function showSuccessAnimation() {
         // 隐藏借出界面，显示成功界面
         document.getElementById('borrow-view').style.display = 'none';
